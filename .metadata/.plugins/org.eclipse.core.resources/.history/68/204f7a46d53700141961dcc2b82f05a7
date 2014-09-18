@@ -1,0 +1,16 @@
+package com.zaneray.coursetracking.roster.xml;
+
+import java.util.List;
+
+import org.jdom2.Element;
+
+import com.zaneray.coursetracking.roster.Roster;
+
+public class RosterXMLWriter {
+
+	public void write(List<Roster> rosters) {
+		Element carElement = new Element("car");
+		
+	}
+
+}

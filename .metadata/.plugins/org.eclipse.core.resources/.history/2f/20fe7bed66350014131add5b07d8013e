@@ -1,0 +1,11 @@
+package com.zaneray.coursetracking.course.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class CreateHandler {
+
+	public void create(HttpServletRequest request, HttpServletResponse response) {
+		
+	}
+}

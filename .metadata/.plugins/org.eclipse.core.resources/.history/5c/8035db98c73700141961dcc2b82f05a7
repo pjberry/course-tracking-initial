@@ -1,0 +1,27 @@
+package com.zaneray.coursetracking.roster.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zaneray.coursetracking.roster.RosterDAO;
+
+public class AddStudentToRosterHandler {
+
+	public void addStudent(HttpServletRequest request, HttpServletResponse response) {
+		if (isValidRequest(request)) {
+			Integer courseId = new Integer(request.getParameter("courseId"));
+			Integer studentId =  new Integer(request.getParameter("studentId"));
+			new RosterDAO().addStudent(courseId, studentId);
+			request.setAttribute("courseId", courseId);
+		}		
+	}
+
+	private boolean isValidRequest(HttpServletRequest request) {
+		String courseParameter = request.getParameter("courseId");
+		String studentParameter = request.getParameter("studentId");
+		
+		System.out.println(courseParameter);
+		System.out.println(studentParameter);
+		return courseParameter != null && !courseParameter.isEmpty() && studentParameter != null && !studentParameter.isEmpty();
+	}
+}

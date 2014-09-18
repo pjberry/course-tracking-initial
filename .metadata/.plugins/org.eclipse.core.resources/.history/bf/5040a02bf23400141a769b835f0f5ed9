@@ -1,0 +1,65 @@
+package com.zaneray.coursetracking.course;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import com.zaneray.coursetracking.database.ConnectionHelper;
+import com.zaneray.coursetracking.database.Database;
+
+public class CourseDAO {
+
+	public List<Course> retreiveAll() {
+		Connection conn = new Database().getConnection();
+		
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT id, name FROM courses ORDER BY name");
+			return buildCourses(resultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			ConnectionHelper.closeConnection(conn);
+		}
+	}
+
+	public Course create(String courseName) {
+		Connection conn = new Database().getConnection();
+		Integer id = new Random().nextInt();
+		try {
+			insertCourse(courseName, conn, id);
+			return new Course(id, courseName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			ConnectionHelper.closeConnection(conn);
+		}
+	}
+
+	private List<Course> buildCourses(ResultSet resultSet) throws SQLException {
+		List<Course> courses = new ArrayList<Course>();
+		while(resultSet.next()) {
+			Integer id = resultSet.getInt(1);
+			String name = resultSet.getString(2);
+			courses.add( new Course(id, name) );
+		}
+		return courses;
+	}
+	
+	private void insertCourse(String courseName, Connection conn, Integer id) throws SQLException {
+		PreparedStatement statement = conn.prepareStatement("INSERT INTO courses SET id = ?, name = ?");
+		statement.setInt(1, id);
+		statement.setString(2, courseName);
+		statement.executeUpdate();
+	}
+	
+}

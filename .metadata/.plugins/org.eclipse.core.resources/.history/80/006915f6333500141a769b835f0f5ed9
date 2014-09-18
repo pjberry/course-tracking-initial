@@ -1,0 +1,67 @@
+package com.zaneray.coursetracking.student;
+
+import static org.junit.Assert.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.zaneray.coursetracking.student.StudentDAO;
+import com.zaneray.coursetracking.course.Course;
+import com.zaneray.coursetracking.course.CourseDAO;
+import com.zaneray.coursetracking.database.Database;
+
+public class StudentDAOTest {
+
+	private Connection connection;
+	
+	@Before
+	public void prepareConnection() throws SQLException {
+		connection = new Database().getConnection();
+	}
+	
+	@After
+	public void closeConnection() throws SQLException {
+		connection.close();
+	}
+	
+	@Test
+	public void canRetrieveEmptyList() throws SQLException {
+		StudentDAO studentDAO = new StudentDAO();
+			
+		List<Student> students = studentDAO.retreiveAll();
+			
+		assertTrue(students.isEmpty());
+	}
+	
+	@Test
+	public void canRetrieveOne() throws SQLException {
+		try {
+			insertStudent(-1, "First Name", "Last Name", "01-01-1901");
+			CourseDAO courseDao = new CourseDAO();
+			
+			List<Course> courses = courseDao.retreiveAll();
+			
+			assertTrue(courses.size() == 1);
+			assertEquals(ID_ONE, courses.get(0).getId());
+			assertEquals(COURSE_NAME_ONE, courses.get(0).getName());
+		}
+		finally {
+			deleteStudent(ID_ONE);
+		}
+	}
+
+	private void insertStudent(Integer Id, String firstName, String lastName, String date) {
+		PreparedStatement statment = connection.prepareStatement("INSERT INTO students SET id = ?, first_name = ?, last_name = ?, birth_date = ?);
+		statment.setInt(1, id);
+		statment.setString(2, courseName);
+		statment.execute();
+	}
+	
+	
+}

@@ -1,0 +1,17 @@
+package com.zaneray.coursetracking.student.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zaneray.coursetracking.course.CourseDAO;
+
+public class DeleteHandler {
+
+	public void delete(HttpServletRequest request, HttpServletResponse response) {
+		Integer courseId = new Integer( request.getParameter("courseId") );
+		CourseDAO courseDao = new CourseDAO();
+		courseDao.delete(courseId);
+		
+	}
+
+}

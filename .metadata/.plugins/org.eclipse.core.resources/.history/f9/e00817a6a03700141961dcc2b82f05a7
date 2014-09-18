@@ -1,0 +1,70 @@
+package com.zaneray.coursetracking.roster;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import com.zaneray.coursetracking.course.Course;
+import com.zaneray.coursetracking.course.CourseDAO;
+import com.zaneray.coursetracking.database.CloserHelper;
+import com.zaneray.coursetracking.database.Database;
+import com.zaneray.coursetracking.student.Student;
+import com.zaneray.coursetracking.student.StudentDAO;
+
+public class RosterDAO {
+
+	public List<Roster> retreiveAll() {
+		List<Course> courses = new CourseDAO().retreiveAll();
+		
+		List<Roster> rosters = new ArrayList<Roster>(); 
+		for(Course course: courses) {
+			rosters.add( buildRosterFor(course) );
+		}
+		
+		return rosters; 
+	}
+
+	private Roster buildRosterFor(Course course) {
+		Connection connection = new Database().getConnection();
+		PreparedStatement statement = null;
+		
+		try {
+			statement = connection.prepareStatement("SELECT student_id FROM rosters WHERE course_id = ?");
+			statement.setInt(1, course.getId());
+			ResultSet resultSet = statement.executeQuery();
+			List<Student> students = buildStudentList(resultSet);
+			return new Roster(course, students);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			CloserHelper.close(connection, statement);
+		}
+		
+	}
+
+	private List<Student> buildStudentList(ResultSet resultSet) throws SQLException {
+		List<Student> students = new ArrayList<Student>();
+		while(resultSet.next()) {
+			Integer studentId = resultSet.getInt(1);
+			Student student = new StudentDAO().retrieve(studentId);
+			students.add(student);
+		}
+		return students;
+	}
+
+	private class StudentComparator implements Comparator<Student> {
+
+		public int compare(Student studentOne, Student studentTwo) {
+			String studentOneRepresentation = studentOne.getLastName() + studentOne.getFirstName() + studentTwo.getBirthDate();
+			String studentTwoRepresentation = studentOne.getLastName() + studentOne.getFirstName() + studentTwo.getBirthDate();
+			return 0;
+		}
+		
+	}
+}

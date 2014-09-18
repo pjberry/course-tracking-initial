@@ -1,0 +1,34 @@
+package com.zaneray.coursetracking.roster.controller;
+
+import java.io.IOException;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zaneray.coursetracking.roster.database.RosterDAO;
+
+public class DumpToXMLHandler {
+
+	public void dump(ServletContext context, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		ServletOutputStream outStream = response.getOutputStream();
+		String mimetype = "application/xml";
+		response.setContentType(mimetype);
+
+		RosterDAO rosterDao = new RosterDAO();
+		List<Roster> roster = rosterDao.retrieveAll();
+
+//		DataInputStream in = new DataInputStream(new FileInputStream(file));
+//
+//		// reads the file's bytes and writes them to the response stream
+//		while ((in != null) && ((length = in.read(byteBuffer)) != -1))
+//		{
+//			outStream.write(byteBuffer,0,length);
+//		}
+//
+//		in.close();
+//		outStream.close();
+	}
+
+}

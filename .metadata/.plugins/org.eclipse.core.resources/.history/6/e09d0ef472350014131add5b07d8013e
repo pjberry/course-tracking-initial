@@ -1,0 +1,17 @@
+package com.zaneray.coursetracking.course.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zaneray.coursetracking.course.Course;
+import com.zaneray.coursetracking.course.CourseDAO;
+
+public class UpdateHandler {
+
+	public void update(HttpServletRequest request, HttpServletResponse response) {
+		CourseDAO courseDao = new CourseDAO();
+		Integer courseId = new Integer(request.getParameter("courseId"));
+		String newCourseName = request.getParameter("newCourseName");
+		courseDao.update(new Course(courseId, newCourseName));
+	}
+}

@@ -1,0 +1,5 @@
+INDEX VERSION 1.126
+/Users/pjberry/Development/course-tracking/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/460873233.index
+/course-tracking/src
+/Users/pjberry/Development/course-tracking/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/827073982.index
+/course-tracking/src

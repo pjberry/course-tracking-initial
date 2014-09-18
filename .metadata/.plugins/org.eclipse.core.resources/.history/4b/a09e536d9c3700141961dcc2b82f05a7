@@ -1,0 +1,62 @@
+<%@ page language="java" pageEncoding="UTF-8" session="false"%>
+<!DOCTYPE html>
+<html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<head>
+<title>Rosters</title>
+</head>
+<body>
+	<h2>Rosters</h2>
+	
+	<h3>Add A Roster</h3>
+	<form method="POST" action='RosterController' name="addRoster">
+	Course Name Which Must Be A Class With No Students: <input type="text" name="firstName" /> <br/> 
+	Check boxes for all students 
+	<input type="hidden" name="action" value="create">
+	<input type="submit" value="Add">
+	</form>
+	
+	<br>
+	
+	<c:foreaEach items="${rosters}" var="roster">
+	<table></table>
+	</c:foreaEach>
+	<table>
+		<thead>
+			<tr> 
+				<th>First Name</th> 
+				<th>Last Name</th>
+				<th>Birth Date</th>
+				<th colspan=2>Action</th>
+			</tr>
+		</thead>
+		<c:forEach items="${students}" var="student">
+			<tr>
+				<td> <c:out value="${student.firstName}" /> </td>
+				<td> <c:out value="${student.lastName}" /> </td>
+				<td> <c:out value="${student.birthDate}" /> </td>
+				<td>
+					<form method="POST" action='StudentController' name="updateStudent">
+						<input type="hidden" name="action" value="forward" />
+						<input type="hidden" name="dispatchTo" value="/updateStudent.jsp" />
+						<input type="hidden" name="studentId" value="<c:out value="${student.id}"/>" />
+						<input type="hidden" name="firstName" value="<c:out value="${student.firstName}"/>" />
+						<input type="hidden" name="lastName" value="<c:out value="${student.lastName}"/>" />
+						<input type="hidden" name="birthDate" value="<c:out value="${student.birthDate}"/>" />
+						<input type="submit" value="Update">
+					</form>
+				</td>
+                <td>
+                	<form method="POST" action='StudentController' name="deleteStudent">
+						<input type="hidden" name="action" value="delete" />
+						<input type="hidden" name="studentId" value="<c:out value="${student.id}"/>" />
+						<input type="submit" value="Delete">
+					</form>
+                </td>
+			</tr>
+		</c:forEach>	
+	</table>
+</body>
+
+</html>

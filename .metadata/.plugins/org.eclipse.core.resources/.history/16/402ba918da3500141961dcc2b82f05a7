@@ -1,0 +1,108 @@
+package com.zaneray.coursetracking.course;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import com.zaneray.coursetracking.database.CloserHelper;
+import com.zaneray.coursetracking.database.Database;
+
+public class CourseDAO {
+
+	public List<Course> retreiveAll() {
+		Connection connection = new Database().getConnection();
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT id, name FROM courses ORDER BY name");
+			return buildCourses(resultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			CloserHelper.closeResultSet(resultSet);
+			CloserHelper.closeStatement(statement);
+			CloserHelper.closeConnection(connection);
+		}
+	}
+
+	public Course create(String courseName) {
+		Connection connection = new Database().getConnection();
+		Integer id = new Random().nextInt();
+		try {
+			insertCourse(connection, id, courseName);
+			return new Course(id, courseName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			CloserHelper.closeConnection(connection);
+		}
+	}
+
+	public void update(Course course) {
+		Connection connection = new Database().getConnection();
+		try {
+			updateCourse(connection, course.getId(), course.getName());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			CloserHelper.closeConnection(connection);
+		}
+	}
+	
+	public void delete(Integer courseId) {
+		Connection connection = new Database().getConnection();
+		try {
+			deleteCourse(connection, courseId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			CloserHelper.closeConnection(connection);
+		}
+	}
+	
+	private List<Course> buildCourses(ResultSet resultSet) throws SQLException {
+		List<Course> courses = new ArrayList<Course>();
+		while(resultSet.next()) {
+			Integer id = resultSet.getInt(1);
+			String name = resultSet.getString(2);
+			courses.add( new Course(id, name) );
+		}
+		return courses;
+	}
+	
+	private void insertCourse(Connection connection, Integer id, String courseName) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("INSERT INTO courses SET id = ?, name = ?");
+		statement.setInt(1, id);
+		statement.setString(2, courseName);
+		statement.executeUpdate();
+	}
+	
+	private void updateCourse(Connection connection, Integer id, String courseName) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("UPDATE courses SET name = ? WHERE id = ?");
+		statement.setString(1, courseName);
+		statement.setInt(2, id);
+		statement.executeUpdate();
+	}
+	
+	private void deleteCourse(Connection connection, Integer id) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("DELETE FROM courses WHERE id = ?");
+		statement.setInt(1, id);
+		statement.executeUpdate();
+	}
+
+	
+}

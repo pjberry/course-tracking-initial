@@ -1,0 +1,20 @@
+package com.zaneray.coursetracking.database;
+
+import static org.junit.Assert.*;
+
+import java.sql.Connection;
+
+import org.junit.Test;
+
+public class DatabaseTest extends Database {
+
+	@Test
+	public void test() {
+		Database database = new Database();
+		
+		Connection conn = database.getConnection();
+		
+		assertNotNull(conn);
+	}
+
+}

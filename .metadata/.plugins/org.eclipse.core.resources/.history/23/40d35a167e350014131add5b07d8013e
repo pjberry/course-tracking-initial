@@ -1,0 +1,5 @@
+package com.zaneray.coursetracking.course;
+
+public class CourseDatabaseTestUtils {
+
+}

@@ -1,0 +1,28 @@
+package com.zaneray.coursetracking.database;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class Database {
+
+	public Database() {
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public Connection getConnection() {
+		try {
+			return DriverManager.getConnection("jdbc:mysql://localhost/course_tracking?user=root");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	
+}

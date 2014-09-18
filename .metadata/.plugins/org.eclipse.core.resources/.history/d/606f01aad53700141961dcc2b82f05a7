@@ -1,0 +1,30 @@
+package com.zaneray.coursetracking.roster.xml;
+
+import java.util.List;
+
+import org.jdom2.Element;
+
+import com.zaneray.coursetracking.roster.Roster;
+import com.zaneray.coursetracking.student.Student;
+
+public class RosterXMLWriter {
+
+	public void write(List<Roster> rosters) {
+		
+		for(Roster roster : rosters) {
+			
+			for(Student student : roster.getStudents()) {
+				Element studentElement = buildStudentElement(student);
+			}
+		}
+		
+//		Element classes = new Element("classes");
+//		classes.
+	}
+
+	private Element buildStudentElement(Student student) {
+		Element studentElement = new Element("student");
+		studentElement.addContent(student.getFirstName() + " " + student.getLastName());
+		return studentElement;
+	}
+}

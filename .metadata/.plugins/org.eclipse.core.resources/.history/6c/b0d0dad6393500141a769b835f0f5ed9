@@ -1,0 +1,79 @@
+package com.zaneray.coursetracking.student;
+
+import static org.junit.Assert.*;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.zaneray.coursetracking.student.StudentDAO;
+import com.zaneray.coursetracking.course.Course;
+import com.zaneray.coursetracking.course.CourseDAO;
+import com.zaneray.coursetracking.database.Database;
+
+public class StudentDAOTest {
+
+	private Connection connection;
+	
+	private final Integer ID_ONE = -1;
+	private final Integer ID_TWO = -2;
+	
+	@Before
+	public void prepareConnection() throws SQLException {
+		connection = new Database().getConnection();
+	}
+	
+	@After
+	public void closeConnection() throws SQLException {
+		connection.close();
+	}
+	
+	@Test
+	public void canRetrieveEmptyList() throws SQLException {
+		StudentDAO studentDAO = new StudentDAO();
+			
+		List<Student> students = studentDAO.retreiveAll();
+			
+		assertTrue(students.isEmpty());
+	}
+	
+	@Test
+	public void canRetrieveOne() throws SQLException {
+		try {
+			insertStudent(ID_ONE, "First Name", "Last Name", "1901-01-01");
+			StudentDAO studentDAO = new StudentDAO();
+			
+			List<Student> students = studentDAO.retreiveAll();
+			
+			assertEquals(students.size(), 1);
+			assertEquals(ID_ONE, students.get(0).getId());
+			assertEquals("First Name", students.get(0).getFirstName());
+			assertEquals("Last Name", students.get(0).getLastName());
+		}
+		finally {
+			deleteStudent(ID_ONE);
+		}
+	}
+
+	private void insertStudent(Integer id, String firstName, String lastName, String date) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("INSERT INTO students SET id = ?, first_name = ?, last_name = ?, birth_date = ?");
+		statement.setInt(1, id);
+		statement.setString(2, firstName);
+		statement.setString(3, lastName);
+		statement.setDate(4, Date.valueOf(date));
+		statement.execute();
+	}
+	
+	private void deleteStudent(Integer id) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("DELETE FROM students WHERE id = ?");
+		statement.setInt(1, id);
+		statement.executeUpdate();
+	}
+	
+}

@@ -1,0 +1,20 @@
+package com.zaneray.coursetracking.course;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class CourseDatabaseTestUtils {
+
+	public void insertCourse(Connection connection, Integer id, String courseName) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("INSERT INTO courses SET id = ?, name = ?");
+		statement.setInt(1, id);
+		statement.setString(2, courseName);
+		statement.execute();
+	}
+	
+	public void deleteCourse(Connection connection, Integer id) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("DELETE FROM courses WHERE id = ?");
+		statement.setInt(1, id);
+		statement.executeUpdate();
+	}
+}

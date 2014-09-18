@@ -1,0 +1,5 @@
+package com.zaneray.coursetracking.database;
+
+public class ConnectionHelper {
+
+}

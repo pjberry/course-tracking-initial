@@ -1,0 +1,18 @@
+1410107475404	Extract method 'buildStudentList'
+1410212739650	Rename local variable 'roster'
+1410218343750	Extract method 'buildCourse'
+1410223444477	Extract method 'retrieveCourse'
+1410227246588	Rename resource 'rosterList.jsp'
+1410227597616	Rename method 'update'
+1410230724137	Delete element
+1410230810664	Move compilation units
+1410230852630	Delete element
+1410230892091	Delete element
+1410230932140	Move compilation units
+1410231007451	Delete element
+1410231038211	Move compilation units
+1410232914280	Delete element
+1410236757337	Extract method 'writeDocument'
+1410236788767	Extract method 'buildRosterOne'
+1410236804832	Extract method 'buildRosterTwo'
+1410274170606	Extract method 'saveUpdatedStudent'

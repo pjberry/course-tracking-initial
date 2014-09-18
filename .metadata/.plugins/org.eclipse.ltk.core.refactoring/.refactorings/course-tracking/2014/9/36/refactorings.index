@@ -1,0 +1,29 @@
+1409880992004	Delete element
+1409881459502	Rename package 'com.zaneray.coursetracking.dao'
+1409882147739	Delete element
+1409882155340	Delete element
+1409885113346	Extract method 'insertCourse'
+1409886003127	Rename local variable 'stmt'
+1409915107326	Rename method 'findAll'
+1409916123644	Extract method 'insertCourse'
+1409916983753	Rename field 'conn'
+1409917098299	Rename local variable 'conn'
+1409931507446	Delete element
+1409945683075	Rename local variable 'statment'
+1409946801094	Encapsulate field 'firstName'
+1409946819762	Encapsulate field 'lastName'
+1409946827353	Encapsulate field 'birthDate'
+1409946980663	Encapsulate field 'id'
+1409953184417	Move 1 resources to 'WebContent'
+1409963559471	Move 1 resources to 'WebContent'
+1409967273535	Move compilation unit
+1409969537525	Copy file
+1409973474980	Copy file
+1409975828465	Delete element
+1409975886872	Copy package
+1409975896652	Delete element
+1409975904325	Delete element
+1409976117350	Encapsulate field 'course'
+1409976130249	Encapsulate field 'students'
+1410016984508	Rename type 'ConnectionHelper'
+1410017764779	Rename method 'buildRoserterFor'

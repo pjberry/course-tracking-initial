@@ -1,0 +1,9 @@
+package com.zaneray.coursetracking.course;
+
+public class Course {
+	private final String name;
+	
+	public Course(String name) {
+		this.name = name
+	}
+}

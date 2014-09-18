@@ -1,0 +1,13 @@
+package com.zaneray.coursetracking.student.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class CreateHandler {
+
+	public void create(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

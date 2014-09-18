@@ -1,0 +1,12 @@
+package com.zaneray.coursetracking.roster.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class DumpToXMLHandler {
+
+	public void dump(HttpServletRequest request, HttpServletResponse response) {
+		
+	}
+
+}

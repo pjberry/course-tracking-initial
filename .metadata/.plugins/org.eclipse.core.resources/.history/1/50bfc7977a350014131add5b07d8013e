@@ -1,0 +1,17 @@
+package com.zaneray.coursetracking.roster;
+
+import java.util.List;
+
+import com.zaneray.coursetracking.course.Course;
+import com.zaneray.coursetracking.student.Student;
+
+public class Roster {
+
+	private final Course course;
+	private final List<Student> students;
+	
+	public Roster(Course course, List<Student> students) {
+		this.course = course;
+		this.students = students;
+	}
+}

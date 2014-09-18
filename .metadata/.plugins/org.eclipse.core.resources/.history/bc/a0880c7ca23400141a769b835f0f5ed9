@@ -1,0 +1,14 @@
+package com.zaneray.coursetracking.database;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class DatabaseTest extends Database {
+
+	@Test
+	public void test() {
+		
+	}
+
+}

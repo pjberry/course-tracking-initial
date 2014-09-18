@@ -1,0 +1,38 @@
+package com.zaneray.coursetracking.student;
+
+import static org.junit.Assert.*;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.zaneray.coursetracking.student.StudentDAO;
+import com.zaneray.coursetracking.database.Database;
+
+public class StudentDAOTest {
+
+	private Connection connection;
+	
+	@Before
+	public void prepareConnection() throws SQLException {
+		connection = new Database().getConnection();
+	}
+	
+	@After
+	public void closeConnection() throws SQLException {
+		connection.close();
+	}
+	
+	@Test
+	public void canRetrieveEmptyList() throws SQLException {
+		StudentDAO studentDAO = new StudentDAO();
+			
+		List<Student> students = studentDAO.retreiveAll();
+			
+		assertTrue(students.isEmpty());
+	}
+}

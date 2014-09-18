@@ -1,0 +1,28 @@
+package com.zaneray.coursetracking.roster.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zaneray.coursetracking.course.Course;
+import com.zaneray.coursetracking.course.CourseDAO;
+import com.zaneray.coursetracking.roster.RosterDAO;
+
+public class UpdateHandler {
+
+	public void update(HttpServletRequest request, HttpServletResponse response) {
+		Integer courseId = new Integer(request.getParameter("courseId"));
+		CourseDAO courseDao = new CourseDAO();
+		Course course = courseDao.retrieve(courseId);
+		rosterDao.buildRosterFor(course);
+	
+		// get the students NOT in the course
+	
+		//put the course in the request
+		
+		//put the students in the request
+	
+		RosterDAO rosterDao = new RosterDAO();
+		rosterDao.buildRosterFor(course);
+	}
+
+}

@@ -1,0 +1,20 @@
+package com.zaneray.coursetracking.student.controller;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ForwardHandler {
+
+	public void forward(ServletContext servletContext, HttpServletRequest request, HttpServletResponse response) {
+
+		
+		Integer studentId = new Integer(request.getParameter("studentId"));
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String birthDate = request.getParameter("birthDate");
+		
+		
+	}
+
+}

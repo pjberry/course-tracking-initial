@@ -1,0 +1,16 @@
+package com.zaneray.coursetracking.roster.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class UpdateHandler {
+
+	public void update(HttpServletRequest request, HttpServletResponse response) {
+		// get the course
+		// get the students NOT in the course
+		//put the course in the request
+		//put the students in the request
+		
+	}
+
+}

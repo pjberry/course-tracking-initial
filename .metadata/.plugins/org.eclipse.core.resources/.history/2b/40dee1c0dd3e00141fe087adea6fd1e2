@@ -1,0 +1,25 @@
+package com.bitmotif.coursetracking.course.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zaneray.coursetracking.course.Course;
+import com.zaneray.coursetracking.course.database.CourseDAO;
+
+public class ReadHandler {
+	
+	public void dispatchToPopulatedCourseList(ServletContext servletContext, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		CourseDAO courseDao = new CourseDAO();
+		List<Course> courses = courseDao.retrieveAll();
+		
+		request.setAttribute("courses", courses);
+		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/courseList.jsp");
+		requestDispatcher.forward(request, response);
+	}
+}

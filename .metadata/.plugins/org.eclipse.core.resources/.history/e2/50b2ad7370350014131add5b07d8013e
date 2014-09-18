@@ -1,0 +1,31 @@
+package com.zaneray.coursetracking.student.controller;
+
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zaneray.coursetracking.course.Course;
+import com.zaneray.coursetracking.course.CourseDAO;
+import com.zaneray.coursetracking.student.Student;
+import com.zaneray.coursetracking.student.StudentDAO;
+
+public class ReadHandler {
+
+	public void dispatchToPopulatedStudentList(ServletContext servletContext, HttpServletRequest request, HttpServletResponse response) {
+		CourseDAO courseDao = new CourseDAO();
+		List<Course> courses = courseDao.retreiveAll();
+		request.setAttribute("courses", courses);
+		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/courseList.jsp");
+		requestDispatcher.forward(request, response);
+		
+		StudentDAO studentDao = new StudentDAO();
+		List<Student> students = studentDao.retreiveAll();
+		request.setAttribute("students", students);
+		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/studentList.jsp");
+		requestDispatcher.forward(request, response);
+	}
+
+}

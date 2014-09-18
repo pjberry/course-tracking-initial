@@ -1,0 +1,32 @@
+package com.zaneray.coursetracking.roster.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zaneray.coursetracking.course.Course;
+import com.zaneray.coursetracking.course.CourseDAO;
+import com.zaneray.coursetracking.roster.Roster;
+import com.zaneray.coursetracking.roster.RosterDAO;
+
+public class ReadHandler {
+
+	public void dispatchToPopulatedRosterList(ServletContext servletContext, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Integer courseId = new Integer(request.getParameter("courseId"));
+		CourseDAO courseDao = new CourseDAO();
+		Course course = courseDao.retrieve(courseId);
+		
+		RosterDAO rosterDao = new RosterDAO();
+		Roster roster = rosterDao.buildRosterFor(course);
+		request.setAttribute("roster", roster);
+		
+		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/rosterList.jsp");
+		requestDispatcher.forward(request, response);
+	}
+
+}

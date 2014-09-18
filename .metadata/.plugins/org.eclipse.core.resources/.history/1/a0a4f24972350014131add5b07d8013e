@@ -1,0 +1,28 @@
+package com.zaneray.coursetracking.student.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.zaneray.coursetracking.course.CourseDAO;
+import com.zaneray.coursetracking.student.StudentDAO;
+
+public class CreateHandler {
+
+	public void create(HttpServletRequest request, HttpServletResponse response) {
+		String firstName = request.getParameter("firstName");
+		String lastName = request.getParameter("lastName");
+		String birthDate = request.getParameter("birthDate");
+
+		
+		StudentDAO studentDao = new StudentDAO();
+		studentDao.create(firstName, lastName, birthDate);
+		
+		CourseDAO courseDao = new CourseDAO();
+		String courseName = request.getParameter("courseName");
+		if(!courseName.isEmpty()) courseDao.create(courseName);
+	}
+
+	private Boolean isValidStudentInformation(String firstName, String lastName, String birthDate) {
+		
+	}
+}

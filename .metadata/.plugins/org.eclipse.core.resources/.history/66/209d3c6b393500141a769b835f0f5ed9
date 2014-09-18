@@ -1,0 +1,36 @@
+package com.zaneray.coursetracking.student;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.zaneray.coursetracking.database.ConnectionHelper;
+import com.zaneray.coursetracking.database.Database;
+
+
+public class StudentDAO {
+
+	public List<Student> retreiveAll() {
+Connection connection = new Database().getConnection();
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT id, last_name, first_name, birth_date FROM students ORDER BY last_name");
+			return buildStudents(resultSet);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			ConnectionHelper.closeConnection(connection);
+		}
+	}
+
+	private List<Student> buildStudents(ResultSet resultSet) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,45 @@
+package com.zaneray.coursetracking.course;
+
+import static org.junit.Assert.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.zaneray.coursetracking.database.Database;
+
+public class CourseDAOTest {
+
+	private Connection conn;
+	
+	@Before
+	public void prepareConnection() throws SQLException {
+		conn = new Database().getConnection();
+		
+		PreparedStatement stmt = conn.prepareStatement("INSERT INTO courses SET id = ?, name = ?");
+		stmt.setInt(1, -1);
+		stmt.setString(2, "Course Name For Test");
+		stmt.execute();
+	}
+	
+	@After
+	public void closeConnection() throws SQLException {
+		conn.close();
+	}
+	
+	@Test
+	public void test() {
+		CourseDAO courseDao = new CourseDAO();
+		
+		List<Course> courses = courseDao.findAll();
+		
+		assertTrue(courses.size() > 0);
+	}
+
+}

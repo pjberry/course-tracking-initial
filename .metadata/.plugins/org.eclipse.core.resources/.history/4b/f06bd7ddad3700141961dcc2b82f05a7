@@ -1,0 +1,185 @@
+package com.zaneray.coursetracking.course;
+
+import static org.junit.Assert.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.zaneray.coursetracking.database.Database;
+
+public class CourseDAOTest {
+
+	private Connection connection;
+	
+	private final Integer ID_ONE = -1;
+	private final Integer ID_TWO = -2;
+	
+	private final String COURSE_NAME_ONE = "Course Name For Test--ONE";
+	private final String COURSE_NAME_TWO = "Course Name For Test--TWO";
+	
+	@Before
+	public void prepareConnection() throws SQLException {
+		connection = new Database().getConnection();
+	}
+	
+	@After
+	public void closeConnection() throws SQLException {
+		connection.close();
+	}
+	
+	@Test
+	public void canRetrieveEmptyList() throws SQLException {
+		CourseDAO courseDao = new CourseDAO();
+			
+		List<Course> courses = courseDao.retreiveAll();
+			
+		assertTrue(courses.isEmpty());
+	}
+	
+	@Test
+	public void canRetrieveOne() throws SQLException {
+		try {
+			insertCourse(ID_ONE, COURSE_NAME_ONE);
+			CourseDAO courseDao = new CourseDAO();
+			
+			List<Course> courses = courseDao.retreiveAll();
+			
+			assertTrue(courses.size() == 1);
+			assertEquals(ID_ONE, courses.get(0).getId());
+			assertEquals(COURSE_NAME_ONE, courses.get(0).getName());
+		}
+		finally {
+			deleteCourse(ID_ONE);
+		}
+	}
+	
+	@Test
+	public void canRetrieveTwoSortedByName() throws SQLException {
+		try {
+			insertCourse(ID_ONE, COURSE_NAME_ONE);
+			insertCourse(ID_TWO, COURSE_NAME_TWO);
+			CourseDAO courseDao = new CourseDAO();
+			
+			List<Course> courses = courseDao.retreiveAll();
+			
+			assertTrue(courses.size() == 2);
+			
+			assertEquals(ID_ONE, courses.get(0).getId());
+			assertEquals(COURSE_NAME_ONE, courses.get(0).getName());
+			
+			assertEquals(ID_TWO, courses.get(1).getId());
+			assertEquals(COURSE_NAME_TWO, courses.get(1).getName());
+		}
+		finally {
+			deleteCourse(ID_ONE);
+			deleteCourse(ID_TWO);
+		}
+	}
+
+	@Test
+	public void canCreateACourseWhenGivenAName() throws SQLException {
+		Integer idFromCreation = null;
+		try {
+			assertFalse( courseExistsInDatabase(COURSE_NAME_ONE) );
+			CourseDAO courseDao = new CourseDAO();
+			
+			Course course = courseDao.create( COURSE_NAME_ONE );
+			idFromCreation = course.getId();
+			
+			assertNotNull(idFromCreation);
+			assertEquals(COURSE_NAME_ONE, course.getName());
+			assertTrue( courseExistsInDatabase(idFromCreation) );
+		}
+		finally {
+			deleteCourse(idFromCreation);
+		}
+	}
+	
+	@Test
+	public void canUpdateExistingCourse() throws SQLException {
+		try {
+			insertCourse(ID_ONE, COURSE_NAME_ONE);
+			CourseDAO courseDao = new CourseDAO();
+			assertFalse(courseExistsInDatabase(ID_ONE, "New Name"));
+			
+			Course course = new Course(ID_ONE, "New Name");
+			courseDao.update(course);
+			
+			assertTrue(courseExistsInDatabase(ID_ONE, "New Name"));
+		}
+		finally {
+			deleteCourse(ID_ONE);
+		}
+	}
+	
+	@Test
+	public void canConfirmIfCourseNameExists() throws SQLException {
+		try {
+			CourseDAO courseDao = new CourseDAO();
+			assertFalse(courseDao.exists(COURSE_NAME_ONE));
+			
+			insertCourse(ID_ONE, COURSE_NAME_ONE);
+		
+			assertTrue(courseDao.exists(COURSE_NAME_ONE));
+		}
+		finally {
+			deleteCourse(ID_ONE);
+		}
+	}
+	
+	@Test
+	public void canDelete() throws SQLException {
+		try {
+			insertCourse(ID_ONE, COURSE_NAME_ONE);
+			CourseDAO courseDao = new CourseDAO();
+		
+			courseDao.delete(ID_ONE);
+			
+			assertFalse(courseExistsInDatabase(ID_ONE));
+		}
+		finally {
+			deleteCourse(ID_ONE);
+		}
+	}
+	
+	private void insertCourse(Integer id, String courseName) throws SQLException {
+		CourseDatabaseTestUtils.insertCourse(connection, id, courseName);
+	}
+	
+	private void deleteCourse(Integer id) throws SQLException {
+		CourseDatabaseTestUtils.deleteCourse(connection, id);
+	}
+	
+	private Boolean courseExistsInDatabase(Integer id) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM courses WHERE id = ?");
+		statement.setInt(1, id);
+		ResultSet resultSet = statement.executeQuery();
+		resultSet.next();
+		return resultSet.getInt(1) == 1;
+	}
+
+	private Boolean courseExistsInDatabase(String courseName) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM courses WHERE name = ?");
+		statement.setString(1, courseName);
+		ResultSet resultSet = statement.executeQuery();
+		resultSet.next();
+		return resultSet.getInt(1) == 1;
+	}
+
+	private Boolean courseExistsInDatabase(Integer id, String courseName) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM courses WHERE id = ? AND name = ?");
+		statement.setInt(1, id);
+		statement.setString(2, courseName);
+		ResultSet resultSet = statement.executeQuery();
+		resultSet.next();
+		return resultSet.getInt(1) == 1;
+	}
+
+}

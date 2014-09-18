@@ -1,0 +1,65 @@
+package com.zaneray.coursetracking.course;
+
+import static org.junit.Assert.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.zaneray.coursetracking.database.Database;
+
+public class CourseDAOTest {
+
+	private Connection conn;
+	
+	private final Integer ID_ONE = -1;
+	private final Integer ID_TWO = -2;
+	
+	private final String COURSE_NAME_ONE = "Course Name For Test--ONE";
+	private final String COURSE_NAME_TWO = "Course Name For Test--TWO";
+	
+	@Before
+	public void prepareConnection() throws SQLException {
+		conn = new Database().getConnection();
+	}
+	
+	@After
+	public void closeConnection() throws SQLException {
+		conn.close();
+	}
+	
+	@Test
+	public void canRetrieveOne() throws SQLException {
+		try {
+			insertCourse(ID_ONE, COURSE_NAME_ONE);
+			CourseDAO courseDao = new CourseDAO();
+			
+			List<Course> courses = courseDao.findAll();
+			
+			assertTrue(courses.size() == 1);
+			assertEquals(COURSE_NAME_ONE, courses.get(0).getName());
+		}
+		finally {
+			deleteCourse(ID_ONE);
+		}
+	}
+
+	private void insertCourse(Integer id, String courseName) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("INSERT INTO courses SET id = ?, name = ?");
+		stmt.setInt(1, id);
+		stmt.setString(2, courseName);
+		stmt.execute();
+	}
+	
+	private void deleteCourse(Integer id) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("DELETE FROM courses WHERE id = ?");
+		stmt.setInt(1, id);
+		stmt.executeUpdate();
+	}
+}

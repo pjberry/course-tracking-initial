@@ -1,0 +1,28 @@
+package com.zaneray.coursetracking.roster.controller;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sun.corba.se.spi.ior.iiop.RequestPartitioningComponent;
+import com.zaneray.coursetracking.course.Course;
+import com.zaneray.coursetracking.course.CourseDAO;
+import com.zaneray.coursetracking.roster.RosterDAO;
+
+/*
+ * This UpdateHandler handles the addition of students to a course.
+ * 
+ */
+public class UpdateHandler {
+
+	public void update(HttpServletRequest request, HttpServletResponse response) {
+		Integer courseId = new Integer(request.getParameter("courseId"));
+		Integer studentId =  new Integer(request.getParameter("studentId"));
+		
+		new RosterDAO().addStudent(courseId, studentId);
+		
+		RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/rosterList.jsp");
+		requestDispatcher.forward(request, response);
+	}
+
+}

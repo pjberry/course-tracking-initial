@@ -1,0 +1,179 @@
+package com.zaneray.coursetracking.student;
+
+import static org.junit.Assert.*;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.zaneray.coursetracking.student.StudentDAO;
+import com.zaneray.coursetracking.course.Course;
+import com.zaneray.coursetracking.course.CourseDAO;
+import com.zaneray.coursetracking.database.Database;
+
+public class StudentDAOTest {
+
+	private Connection connection;
+	
+	private final Integer ID_ONE = -1;
+	private final Integer ID_TWO = -2;
+	
+	@Before
+	public void prepareConnection() throws SQLException {
+		connection = new Database().getConnection();
+	}
+	
+	@After
+	public void closeConnection() throws SQLException {
+		connection.close();
+	}
+	
+	@Test
+	public void canRetrieveEmptyList() throws SQLException {
+		StudentDAO studentDao = new StudentDAO();
+			
+		List<Student> students = studentDao.retreiveAll();
+			
+		assertTrue(students.isEmpty());
+	}
+	
+	@Test
+	public void canRetrieveOne() throws SQLException {
+		try {
+			insertStudent(ID_ONE, "First Name", "Last Name", "1901-01-01");
+			StudentDAO studentDao = new StudentDAO();
+			
+			List<Student> students = studentDao.retreiveAll();
+			
+			assertEquals(students.size(), 1);
+			assertEquals(ID_ONE, students.get(0).getId());
+			assertEquals("First Name", students.get(0).getFirstName());
+			assertEquals("Last Name", students.get(0).getLastName());
+			assertEquals("1901-01-01", students.get(0).getBirthDate());
+		}
+		finally {
+			deleteStudent(ID_ONE);
+		}
+	}
+	
+	@Test
+	public void canRetrieveTwoSortedByName() throws SQLException {
+		try {
+			insertStudent(ID_ONE, "First Name", "XYZ", "1901-01-01");
+			insertStudent(ID_TWO, "First Name", "ABC", "1901-01-02");
+			StudentDAO studentDao = new StudentDAO();
+			
+			List<Student> students = studentDao.retreiveAll();
+			
+			assertTrue(students.size() == 2);
+			
+			assertEquals(ID_TWO, students.get(0).getId());
+			assertEquals("First Name", students.get(0).getFirstName());
+			assertEquals("ABC", students.get(0).getLastName());
+			assertEquals("1901-01-02", students.get(0).getBirthDate());
+			
+			assertEquals(ID_ONE, students.get(1).getId());
+			assertEquals("First Name", students.get(1).getFirstName());
+			assertEquals("XYZ", students.get(1).getLastName());
+			assertEquals("1901-01-01", students.get(1).getBirthDate());
+		}
+		finally {
+			deleteStudent(ID_ONE);
+			deleteStudent(ID_TWO);
+		}
+	}
+	
+	@Test
+	public void canCreateAStudentWhenGivenFirstNameAndLastNameAndBirthDate() throws SQLException {
+		Integer idFromCreation = null;
+		try {
+			StudentDAO studentDao = new StudentDAO();
+			
+			Student student = studentDao.create("First Name", "Last Name", "1999-09-09");
+			idFromCreation = student.getId();
+			
+			assertNotNull(idFromCreation);
+			assertEquals("First Name", student.getFirstName());
+			assertEquals("Last Name", student.getLastName());
+			assertEquals("1999-09-09", student.getBirthDate());
+			assertTrue( studentExistsInDatabase(idFromCreation) );
+		}
+		finally {
+			deleteStudent(idFromCreation);
+		}
+	}
+	
+	@Test
+	public void canUpdateExistingStudent() throws SQLException {
+		try {
+			insertStudent(ID_ONE, "First Name", "XYZ", "1901-01-01");
+			StudentDAO studentDao = new StudentDAO();
+			assertFalse(studentExistsInDatabase(ID_ONE, "New First Name", "New Last Name", "2001-01-02"));
+			
+			Student student = new Student(ID_ONE, "New First Name", "New Last Name", "2001-01-02");
+			studentDao.update(student);
+			
+			assertTrue(studentExistsInDatabase(ID_ONE, "New First Name", "New Last Name", "2001-01-02"));
+		}
+		finally {
+			deleteStudent(ID_ONE);
+		}
+	}
+	
+	@Test
+	public void canDelete() throws SQLException {
+		try {
+			insertStudent(ID_ONE, "First Name", "XYZ", "1901-01-01");
+			StudentDAO studentDao = new StudentDAO();
+			
+			Student student = new Student(ID_ONE, "First Name", "XYZ", "1901-01-01");
+			studentDao.delete(student);
+			
+			assertFalse(studentExistsInDatabase(ID_ONE));
+		}
+		finally {
+			deleteStudent(ID_ONE);
+		}
+	}
+	
+	private void insertStudent(Integer id, String firstName, String lastName, String date) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("INSERT INTO students SET id = ?, first_name = ?, last_name = ?, birth_date = ?");
+		statement.setInt(1, id);
+		statement.setString(2, firstName);
+		statement.setString(3, lastName);
+		statement.setDate(4, Date.valueOf(date));
+		statement.execute();
+	}
+	
+	private void deleteStudent(Integer id) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("DELETE FROM students WHERE id = ?");
+		statement.setInt(1, id);
+		statement.executeUpdate();
+	}
+	
+	private Boolean studentExistsInDatabase(Integer id) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM students WHERE id = ?");
+		statement.setInt(1, id);
+		ResultSet resultSet = statement.executeQuery();
+		resultSet.next();
+		return resultSet.getInt(1) == 1;
+	}
+	
+	private Boolean studentExistsInDatabase(Integer id,String firstName, String lastName, String date) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM students WHERE id = ? AND first_name = ? AND last_name = ? and birth_date = ?");
+		statement.setInt(1, id);
+		statement.setString(2, firstName);
+		statement.setString(3, lastName);
+		statement.setDate(4, Date.valueOf(date));
+		ResultSet resultSet = statement.executeQuery();
+		resultSet.next();
+		return resultSet.getInt(1) == 1;
+	}
+}

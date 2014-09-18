@@ -1,0 +1,7 @@
+INDEX VERSION 1.3+/Users/pjberry/Development/course-tracking/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+3382071655.index
+766324764.index
+3760631318.index
+3530444598.index
+1831972614.index
+2099294444.index

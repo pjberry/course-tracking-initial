@@ -1,0 +1,14 @@
+package com.zaneray.coursetracking.student;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class StudentDAO {
+
+	public List<Student> retreiveAll() {
+		
+		return new ArrayList<Student>();
+	}
+
+}

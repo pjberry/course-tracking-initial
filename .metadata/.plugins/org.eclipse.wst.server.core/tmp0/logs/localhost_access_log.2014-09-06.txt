@@ -1,0 +1,11 @@
+0:0:0:0:0:0:0:1%0 - - [06/Sep/2014:00:28:44 -0500] "GET /course-tracking/ HTTP/1.1" 200 419
+0:0:0:0:0:0:0:1%0 - - [06/Sep/2014:00:28:47 -0500] "GET /course-tracking/StudentController HTTP/1.1" 200 644
+0:0:0:0:0:0:0:1%0 - - [06/Sep/2014:00:29:02 -0500] "GET /course-tracking/CourseController HTTP/1.1" 200 467
+0:0:0:0:0:0:0:1%0 - - [06/Sep/2014:00:29:14 -0500] "POST /course-tracking/CourseController HTTP/1.1" 200 1237
+127.0.0.1 - - [06/Sep/2014:10:18:51 -0500] "GET / HTTP/1.1" 404 951
+0:0:0:0:0:0:0:1%0 - - [06/Sep/2014:10:19:03 -0500] "GET /course-tracking HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1%0 - - [06/Sep/2014:10:19:03 -0500] "GET /course-tracking/ HTTP/1.1" 200 419
+0:0:0:0:0:0:0:1%0 - - [06/Sep/2014:10:19:09 -0500] "GET /course-tracking/CourseController HTTP/1.1" 200 467
+0:0:0:0:0:0:0:1%0 - - [06/Sep/2014:10:19:17 -0500] "POST /course-tracking/CourseController HTTP/1.1" 200 1223
+0:0:0:0:0:0:0:1%0 - - [06/Sep/2014:10:19:23 -0500] "POST /course-tracking/CourseController HTTP/1.1" 200 439
+0:0:0:0:0:0:0:1%0 - - [06/Sep/2014:10:19:27 -0500] "POST /course-tracking/CourseController HTTP/1.1" 200 1219
